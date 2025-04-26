@@ -8,6 +8,7 @@ const cors           = require('cors')
 const authRoutes     = require('./routes/auth')
 const generateRoutes = require('./routes/generate')
 const historyRoutes = require('./routes/history');
+const courseRoutes = require('./routes/course');
 
 const app = express()
 const PORT = process.env.PORT || 4000
@@ -21,6 +22,7 @@ app.get('/', (req, res) => res.send('M32 AI Backend running 🚀'))
 app.use('/api/auth',     authRoutes)
 app.use('/api/generate', generateRoutes)
 app.use('/api/history', historyRoutes);
+app.use('/api/courses', courseRoutes);
 
 // Connect MongoDB & Start Server
 mongoose

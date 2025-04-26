@@ -21,15 +21,19 @@ function authMiddleware(req, res, next) {
 
 // POST /api/generate
 router.post('/', authMiddleware, async (req, res) => {
-  const { prompt } = req.body;
-  if (!prompt) return res.status(400).json({ message: 'Prompt required' });
+  const { prompt, type } = req.body;
+
+  if (!prompt || !type) {
+    return res.status(400).json({ message: 'Prompt and type are required' });
+  }
 
   try {
     const result = await generateContent(prompt);
 
-    // ✅ Save to MongoDB
+    // Save prompt, response, and type
     await Generation.create({
       user: req.user.id,
+      type,          // <-- store this!
       prompt,
       response: result
     });
@@ -38,6 +42,7 @@ router.post('/', authMiddleware, async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: 'Failed to generate', error: err.message });
   }
+
 });
 
 module.exports = router;

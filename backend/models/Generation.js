@@ -6,6 +6,11 @@ const generationSchema = new mongoose.Schema({
     ref: 'User',
     required: true
   },
+  type: {
+    type: String,
+    enum: ['rubric', 'feedback', 'assignment'],
+    default: 'rubric'
+  },
   prompt: {
     type: String,
     required: true
