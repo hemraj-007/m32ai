@@ -3,6 +3,8 @@ import Layout from '../components/Layout';
 import API from '../api/api';
 import * as pdfjsLib from 'pdfjs-dist';
 import jsPDF from 'jspdf';
+import { toast } from 'react-hot-toast';
+
 
 
 // Set workerSrc to official PDF.js CDN version
@@ -18,6 +20,7 @@ const Dashboard = () => {
 
   const handleGenerate = async () => {
     if (!prompt) return;
+
     setLoading(true);
     setResponse('');
     setError('');
@@ -35,9 +38,13 @@ const Dashboard = () => {
           },
         }
       );
+
       setResponse(res.data.response);
+      toast.success('Content generated successfully! 🚀');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to generate');
+      const message = err.response?.data?.message || 'Failed to generate';
+      setError(message);
+      toast.error(message);
     } finally {
       setLoading(false);
     }
@@ -102,10 +109,10 @@ const Dashboard = () => {
 
   return (
     <Layout>
-      <div className="bg-white rounded-xl shadow-md p-6 space-y-6">
+      <div className="bg-gray-800 rounded-xl shadow-md p-8 space-y-8">
         {/* <h2 className="text-2xl font-semibold text-gray-800">AI Content Generator 🧠</h2> */}
         <div className="text-center space-y-1">
-          <h1 className="text-3xl font-bold text-gray-800">M32 AI Assistant ✏️</h1>
+          <h1 className="text-3xl font-bold text-gray-200">M32 AI Assistant ✏️</h1>
           <p className="text-sm text-gray-500">Generate rubrics, assignments, or feedback in seconds</p>
         </div>
 
@@ -159,44 +166,31 @@ const Dashboard = () => {
             {loading ? '...' : 'Generate'}
           </button>
         </div>
-
-
-        {/* <button
-          onClick={handleGenerate}
-          className="bg-blue-600 text-white font-medium px-5 py-2 rounded hover:bg-blue-700 transition"
-          disabled={loading}
-        >
-          {loading ? 'Generating...' : 'Generate'}
-        </button> */}
-
         {error && <p className="text-red-500">{error}</p>}
 
         {response && (
-          <div className="bg-gray-100 p-4 rounded mt-4 whitespace-pre-line border border-gray-300">
+          <div className="bg-gray-700 p-4 rounded mt-4 whitespace-pre-line border border-gray-600">
             <div className="flex justify-between items-center mb-2">
-              <h3 className="font-semibold text-gray-700 capitalize">{type} Result:</h3>
+              <h3 className="font-semibold text-gray-100 capitalize">{type} Result:</h3>
 
-              {/* Group Buttons Here */}
               <div className="flex items-center gap-3">
-  <button
-    onClick={() => handleDownload('txt')}
-    className="flex items-center gap-2 px-4 py-1.5 text-sm font-medium border border-blue-500 text-blue-600 rounded hover:bg-blue-50 transition"
-  >
-    📄 .txt
-  </button>
+                <button
+                  onClick={() => handleDownload('txt')}
+                  className="flex items-center gap-2 px-4 py-1.5 text-sm font-medium border border-blue-400 text-blue-300 rounded-full hover:bg-blue-900 transition"
+                >
+                  📄 .txt
+                </button>
 
-  <button
-    onClick={() => handleDownload('pdf')}
-    className="flex items-center gap-2 px-4 py-1.5 text-sm font-medium bg-pink-600 text-white rounded hover:bg-pink-700 transition"
-  >
-    📝 .pdf
-  </button>
-</div>
-
-
+                <button
+                  onClick={() => handleDownload('pdf')}
+                  className="flex items-center gap-2 px-4 py-1.5 text-sm font-medium bg-pink-500 text-white rounded-full hover:bg-pink-600 transition"
+                >
+                  📝 .pdf
+                </button>
+              </div>
             </div>
 
-            <p>{response}</p>
+            <p className="text-gray-100">{response}</p>
           </div>
         )}
 

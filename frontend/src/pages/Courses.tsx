@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import Layout from '../components/Layout';
 import API from '../api/api';
+import { Link } from 'react-router-dom';
+import { toast } from 'react-hot-toast';
+
 
 interface Course {
   _id: string;
@@ -62,8 +65,9 @@ const Courses = () => {
       });
       setCourses([res.data.course, ...courses]);
       setNewCourse('');
+      toast.success('✅ Course created successfully!');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to add course');
+      toast.error('❌ Failed to create course');
     } finally {
       setLoading(false);
     }
@@ -76,8 +80,9 @@ const Courses = () => {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCourses(courses.filter(course => course._id !== id));
+      toast.success('🗑️ Course deleted successfully!');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to delete course');
+      toast.error('❌ Failed to delete course');
     }
   };
 
@@ -94,10 +99,12 @@ const Courses = () => {
       });
       setCourses(courses.map(c => (c._id === id ? res.data.course : c)));
       setEditingCourseId(null);
+      toast.success('✏️ Course updated successfully!');
     } catch (err: any) {
-      setError(err.response?.data?.message || 'Failed to update course');
+      toast.error('❌ Failed to update course');
     }
   };
+
 
   const handleCancelEdit = () => {
     setEditingCourseId(null);
@@ -107,7 +114,7 @@ const Courses = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <h2 className="text-2xl font-semibold text-gray-800">Your Courses 📚</h2>
+        <h2 className="text-3xl font-bold text-white">Your Courses 📚</h2>
 
         {/* Add New Course */}
         <div className="flex gap-2">
@@ -116,73 +123,88 @@ const Courses = () => {
             placeholder="New course name"
             value={newCourse}
             onChange={(e) => setNewCourse(e.target.value)}
-            className="border border-gray-300 rounded px-3 py-2 w-full"
+            className="border border-gray-700 bg-gray-800 rounded-full px-4 py-2 w-full text-gray-200 placeholder-gray-400"
           />
           <button
             onClick={handleAddCourse}
             disabled={loading}
-            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+            className="bg-gradient-to-r from-purple-500 to-pink-500 text-white font-semibold px-10 py-2 rounded-full shadow-md hover:opacity-90 transition-all"
           >
             {loading ? 'Adding...' : '+ Add'}
           </button>
+
         </div>
 
         {/* Error Message */}
         {error && <p className="text-red-500">{error}</p>}
 
         {/* Course List */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {courses.length === 0 ? (
-            <p className="text-gray-500">No courses yet. Start by adding one!</p>
+            <p className="text-gray-400">No courses yet. Start by adding one!</p>
           ) : (
             courses.map((course) => (
-              <div key={course._id} className="bg-white border p-4 rounded shadow hover:shadow-md transition relative">
-                
-                {editingCourseId === course._id ? (
-                  <div className="flex flex-col gap-2">
-                    <input
-                      type="text"
-                      value={editingCourseName}
-                      onChange={(e) => setEditingCourseName(e.target.value)}
-                      className="border border-gray-300 rounded px-2 py-1"
-                    />
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => handleSaveEdit(course._id)}
-                        className="text-green-600 hover:underline text-sm"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={handleCancelEdit}
-                        className="text-gray-500 hover:underline text-sm"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <h3 className="text-lg font-semibold text-gray-800">{course.name}</h3>
-                    <p className="text-xs text-gray-500">Created: {new Date(course.createdAt).toLocaleDateString()}</p>
+              <Link to={`/course/${course._id}`} key={course._id}>
+                <div className="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow-md hover:shadow-lg transition-all hover:scale-[1.02] relative">
 
-                    <div className="flex gap-2 mt-3">
-                      <button
-                        onClick={() => handleStartEditing(course)}
-                        className="text-blue-600 hover:underline text-sm"
-                      >
-                        ✏️ Edit
-                      </button>
-                      <button
-                        onClick={() => handleDeleteCourse(course._id)}
-                        className="text-red-600 hover:underline text-sm"
-                      >
-                        🗑️ Delete
-                      </button>
+                  {editingCourseId === course._id ? (
+                    <div className="flex flex-col gap-3">
+                      <input
+                        type="text"
+                        value={editingCourseName}
+                        onChange={(e) => setEditingCourseName(e.target.value)}
+                        className="border border-gray-600 rounded-full px-4 py-2 bg-gray-700 text-gray-100"
+                      />
+                      <div className="flex gap-2">
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleSaveEdit(course._id);
+                          }}
+                          className="border border-green-400 text-green-300 hover:bg-green-400 hover:text-white px-4 py-1 rounded-full text-xs font-medium transition"
+                        >
+                          ✅ Save
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleCancelEdit();
+                          }}
+                          className="border border-gray-400 text-gray-400 hover:bg-gray-500 hover:text-white px-4 py-1 rounded-full text-xs font-medium transition"
+                        >
+                          ❌ Cancel
+                        </button>
+                      </div>
                     </div>
-                  </>
-                )}
-              </div>
+                  ) : (
+                    <>
+                      <h3 className="text-xl font-semibold text-white">{course.name}</h3>
+                      <p className="text-xs text-gray-400 mt-1">Created: {new Date(course.createdAt).toLocaleDateString()}</p>
+
+                      <div className="flex gap-2 mt-4">
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleStartEditing(course);
+                          }}
+                          className="border border-purple-400 text-purple-300 hover:bg-purple-500 hover:text-white px-4 py-1 rounded-full text-xs font-medium transition"
+                        >
+                          ✏️ Edit
+                        </button>
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleDeleteCourse(course._id);
+                          }}
+                          className="border border-red-400 text-red-300 hover:bg-red-500 hover:text-white px-4 py-1 rounded-full text-xs font-medium transition"
+                        >
+                          🗑️ Delete
+                        </button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </Link>
             ))
           )}
         </div>

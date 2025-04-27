@@ -1,6 +1,26 @@
 @import "tailwindcss";
 
 
-.input {
+/* .input {
   @apply border border-gray-300 rounded px-3 py-2 w-full;
+} */
+
+body {
+  @apply bg-gray-900 text-gray-100;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Inputs, Textareas */
+input, textarea, select {
+  @apply bg-gray-800 border-gray-700 text-gray-100 placeholder-gray-400;
+}
+
+/* Buttons */
+button {
+  @apply bg-gradient-to-r from-purple-500 to-pink-500 text-white;
+}
+
+/* Card containers */
+.card {
+  @apply bg-gray-800 p-6 rounded-xl shadow-md;
 }

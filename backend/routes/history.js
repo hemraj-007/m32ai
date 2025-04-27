@@ -21,8 +21,14 @@ function authMiddleware(req, res, next) {
 // GET /api/history
 router.get('/', authMiddleware, async (req, res) => {
   try {
-    const history = await Generation.find({ user: req.user.id })
-      .sort({ createdAt: -1 }); // newest first
+    const { courseId } = req.query;
+
+    const filter = { user: req.user.id };
+    if (courseId) {
+      filter.course = courseId;
+    }
+
+    const history = await Generation.find(filter).sort({ createdAt: -1 });
 
     res.json({ history });
   } catch (err) {

@@ -40,18 +40,18 @@ const History = () => {
   return (
     <Layout>
       <div className="space-y-6">
-        <h2 className="text-2xl font-semibold text-gray-800">Your History</h2>
+        <h2 className="text-3xl font-bold text-white">Your History 📜</h2>
 
         {/* Filter Buttons */}
-        <div className="flex gap-2 mb-4">
+        <div className="flex flex-wrap gap-2 mb-4">
           {['all', 'rubric', 'assignment', 'feedback'].map((type) => (
             <button
               key={type}
               onClick={() => setFilterType(type as 'all' | 'rubric' | 'assignment' | 'feedback')}
-              className={`px-4 py-1 rounded-full text-sm font-medium border transition ${
+              className={`px-4 py-2 rounded-full text-sm font-semibold transition ${
                 filterType === type
-                  ? 'bg-blue-600 text-white border-blue-600'
-                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-100'
+                  ? 'bg-gradient-to-r from-purple-500 to-pink-500 text-white'
+                  : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
               }`}
             >
               {type.charAt(0).toUpperCase() + type.slice(1)}
@@ -59,32 +59,34 @@ const History = () => {
           ))}
         </div>
 
-        {error && <p className="text-red-500">{error}</p>}
+        {/* Error Message */}
+        {error && <p className="text-red-400">{error}</p>}
 
+        {/* History List */}
         {filteredHistory.length === 0 ? (
-          <p className="text-gray-500">No matching history found.</p>
+          <p className="text-gray-400">No matching history found.</p>
         ) : (
           <div className="space-y-4">
             {filteredHistory.map((item) => (
               <div
                 key={item._id}
-                className="bg-white border border-gray-200 shadow-sm hover:shadow-md transition rounded-lg p-5 space-y-3"
+                className="bg-gray-800 border border-gray-700 rounded-lg p-5 space-y-3 shadow-md hover:shadow-lg transition"
               >
-                <div className="flex items-center justify-between text-sm text-gray-500">
+                <div className="flex items-center justify-between text-xs text-gray-400">
                   <span>{new Date(item.createdAt).toLocaleString()}</span>
-                  <span className="capitalize px-2 py-1 bg-blue-100 text-blue-700 rounded text-xs font-medium">
+                  <span className="capitalize px-2 py-1 bg-blue-600 text-white rounded-full text-xs font-bold">
                     {item.type}
                   </span>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-700 mb-1">Prompt</h3>
-                  <p className="text-gray-800">{item.prompt}</p>
+                  <h3 className="font-semibold text-gray-100 mb-1">Prompt</h3>
+                  <p className="text-gray-300">{item.prompt}</p>
                 </div>
 
                 <div>
-                  <h3 className="font-semibold text-gray-700 mb-1">Response</h3>
-                  <p className="whitespace-pre-line text-gray-700">{item.response}</p>
+                  <h3 className="font-semibold text-gray-100 mb-1">Response</h3>
+                  <p className="whitespace-pre-line text-gray-300">{item.response}</p>
                 </div>
               </div>
             ))}
