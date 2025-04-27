@@ -132,7 +132,6 @@ const Courses = () => {
           >
             {loading ? 'Adding...' : '+ Add'}
           </button>
-
         </div>
 
         {/* Error Message */}
@@ -144,72 +143,81 @@ const Courses = () => {
             <p className="text-gray-400">No courses yet. Start by adding one!</p>
           ) : (
             courses.map((course) => (
-              <Link to={`/course/${course._id}`} key={course._id}>
-                <div className="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow-md hover:shadow-lg transition-all hover:scale-[1.02] relative">
-
-                  {editingCourseId === course._id ? (
-                    <div className="flex flex-col gap-3">
-                      <input
-                        type="text"
-                        value={editingCourseName}
-                        onChange={(e) => setEditingCourseName(e.target.value)}
-                        className="border border-gray-600 rounded-full px-4 py-2 bg-gray-700 text-gray-100"
-                      />
-                      <div className="flex gap-2">
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleSaveEdit(course._id);
-                          }}
-                          className="border border-green-400 text-green-300 hover:bg-green-400 hover:text-white px-4 py-1 rounded-full text-xs font-medium transition"
-                        >
-                          ✅ Save
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleCancelEdit();
-                          }}
-                          className="border border-gray-400 text-gray-400 hover:bg-gray-500 hover:text-white px-4 py-1 rounded-full text-xs font-medium transition"
-                        >
-                          ❌ Cancel
-                        </button>
-                      </div>
+              <div
+                key={course._id}
+                className="bg-gray-800 border border-gray-700 p-5 rounded-xl shadow-md hover:shadow-lg transition-all hover:scale-[1.02] relative"
+              >
+                {editingCourseId === course._id ? (
+                  <div className="flex flex-col gap-3">
+                    <input
+                      type="text"
+                      value={editingCourseName}
+                      onChange={(e) => setEditingCourseName(e.target.value)}
+                      className="border border-gray-600 rounded-full px-4 py-2 bg-gray-700 text-gray-100"
+                    />
+                    <div className="flex gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleSaveEdit(course._id);
+                        }}
+                        className="border border-green-400 text-green-300 hover:bg-green-400 hover:text-white px-4 py-1 rounded-full text-xs font-medium transition"
+                      >
+                        ✅ Save
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleCancelEdit();
+                        }}
+                        className="border border-gray-400 text-gray-400 hover:bg-gray-500 hover:text-white px-4 py-1 rounded-full text-xs font-medium transition"
+                      >
+                        ❌ Cancel
+                      </button>
                     </div>
-                  ) : (
-                    <>
-                      <h3 className="text-xl font-semibold text-white">{course.name}</h3>
-                      <p className="text-xs text-gray-400 mt-1">Created: {new Date(course.createdAt).toLocaleDateString()}</p>
+                  </div>
+                ) : (
+                  <>
+                    {/* Wrap only course name in Link */}
+                    <Link to={`/course/${course._id}`}>
+                      <h3 className="text-xl font-semibold text-white hover:underline hover:text-purple-400 transition">
+                        {course.name}
+                      </h3>
+                    </Link>
 
-                      <div className="flex gap-2 mt-4">
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleStartEditing(course);
-                          }}
-                          className="border border-purple-400 text-purple-300 hover:bg-purple-500 hover:text-white px-4 py-1 rounded-full text-xs font-medium transition"
-                        >
-                          ✏️ Edit
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleDeleteCourse(course._id);
-                          }}
-                          className="border border-red-400 text-red-300 hover:bg-red-500 hover:text-white px-4 py-1 rounded-full text-xs font-medium transition"
-                        >
-                          🗑️ Delete
-                        </button>
-                      </div>
-                    </>
-                  )}
-                </div>
-              </Link>
+                    <p className="text-xs text-gray-400 mt-1">
+                      Created: {new Date(course.createdAt).toLocaleDateString()}
+                    </p>
+
+                    <div className="flex gap-2 mt-4">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleStartEditing(course);
+                        }}
+                        className="border border-purple-400 text-purple-300 hover:bg-purple-500 hover:text-white px-4 py-1 rounded-full text-xs font-medium transition"
+                      >
+                        ✏️ Edit
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleDeleteCourse(course._id);
+                        }}
+                        className="border border-red-400 text-red-300 hover:bg-red-500 hover:text-white px-4 py-1 rounded-full text-xs font-medium transition"
+                      >
+                        🗑️ Delete
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             ))
           )}
         </div>
       </div>
     </Layout>
+
   );
 };
 

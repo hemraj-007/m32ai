@@ -1,14 +1,17 @@
 import { useState } from 'react';
 import Layout from '../components/Layout';
 import API from '../api/api';
-import * as pdfjsLib from 'pdfjs-dist';
+//import * as pdfjsLib from 'pdfjs-dist';
 import jsPDF from 'jspdf';
 import { toast } from 'react-hot-toast';
 
 
-
+   
 // Set workerSrc to official PDF.js CDN version
-pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+//pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
+import * as pdfjsLib from "pdfjs-dist";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
 
 const Dashboard = () => {
@@ -74,9 +77,9 @@ const Dashboard = () => {
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-
+  
     const ext = file.name.split('.').pop()?.toLowerCase();
-
+  
     if (ext === 'txt') {
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -84,14 +87,12 @@ const Dashboard = () => {
         setPrompt(fileText);
       };
       reader.readAsText(file);
-    }
-
-    else if (ext === 'pdf') {
+    } else if (ext === 'pdf') {
       const reader = new FileReader();
       reader.onload = async function () {
         const typedarray = new Uint8Array(this.result as ArrayBuffer);
         const pdf = await pdfjsLib.getDocument({ data: typedarray }).promise;
-
+  
         let fullText = '';
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);
@@ -99,12 +100,18 @@ const Dashboard = () => {
           const pageText = textContent.items.map((item: any) => item.str).join(' ');
           fullText += pageText + '\n';
         }
-
+  
+        // 🔥 ADD THIS CHECK BEFORE setting prompt:
+        if (!fullText.trim()) {
+          toast.error('❌ No text found in PDF. Please upload a text-based PDF.');
+          return;
+        }
+  
         setPrompt(fullText.trim());
       };
       reader.readAsArrayBuffer(file);
     }
-  };
+  };  
 
 
   return (
@@ -143,7 +150,7 @@ const Dashboard = () => {
           <input
             id="file-upload"
             type="file"
-            accept=".txt"
+            accept=".txt,.pdf"
             onChange={handleFileUpload}
             className="hidden"
           />
