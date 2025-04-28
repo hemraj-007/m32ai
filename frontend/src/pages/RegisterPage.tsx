@@ -21,7 +21,7 @@ const RegisterPage = () => {
       const res = await API.post('/auth/register', formData);
       localStorage.setItem('token', res.data.token);
       toast.success('Welcome to M32 AI! 🎉');
-      navigate('/dashboard');
+      navigate('/');
     } catch (err: any) {
       setError(err.response?.data?.message || 'Registration failed');
       toast.error(err.response?.data?.message || 'Registration failed');
@@ -112,7 +112,7 @@ const RegisterPage = () => {
 
           <p className="text-center text-sm text-gray-400">
             Already have an account?{' '}
-            <a href="/" className="text-purple-400 hover:underline">
+            <a href="/login" className="text-purple-400 hover:underline">
               Login
             </a>
           </p>

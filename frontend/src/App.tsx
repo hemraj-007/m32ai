@@ -8,6 +8,7 @@ import History from './pages/History';
 import Courses from './pages/Courses';
 import CoursePage from './pages/CoursePage';
 import { Toaster } from 'react-hot-toast';
+import WelcomePage from './pages/WelcomePage';
 
 const App = () => {
   return (
@@ -27,7 +28,8 @@ const App = () => {
         }}
       />
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<WelcomePage />} /> {/* 👈 Set WelcomePage */}
+        <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/history" element={<History />} />
