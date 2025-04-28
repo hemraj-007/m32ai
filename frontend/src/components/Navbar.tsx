@@ -6,7 +6,7 @@ const Navbar = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    navigate('/login');
+    navigate('/');
   };
 
   const isActive = (path: string) => location.pathname === path;
@@ -15,7 +15,7 @@ const Navbar = () => {
     <nav className="bg-gray-900/70 backdrop-blur-md border-b border-gray-700 px-8 py-4 flex justify-between items-center shadow-md">
       
       {/* Logo - Clickable to Welcome Page */}
-      <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent hover:opacity-90 transition">
+      <Link to="/welcome" className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent hover:opacity-90 transition">
         M32 AI 🧠
       </Link>
 

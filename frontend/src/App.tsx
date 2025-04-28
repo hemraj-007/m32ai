@@ -28,8 +28,8 @@ const App = () => {
         }}
       />
       <Routes>
-        <Route path="/" element={<WelcomePage />} /> {/* 👈 Set WelcomePage */}
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/welcome" element={<WelcomePage />} /> {/* 👈 Set WelcomePage */}
+        <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/history" element={<History />} />
