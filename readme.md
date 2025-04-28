@@ -6,8 +6,8 @@ A full-stack AI-powered educational assistant that lets users generate rubrics, 
 
 ## 🌐 Live Links
 
-- **Frontend:** [https://your-frontend-link.vercel.app](m32ai-two.vercel.app)
-- **Backend:** [https://your-backend-link.onrender.com](https://m32ai-1.onrender.com)
+- **Frontend:** [https://m32ai-two.vercel.app](https://m32ai-two.vercel.app)
+- **Backend:** [https://m32ai-1.onrender.com](https://m32ai-1.onrender.com)
 
 ---
 
@@ -52,4 +52,30 @@ A full-stack AI-powered educational assistant that lets users generate rubrics, 
 ```bash
 git clone https://github.com/your-username/m32-ai-assistant.git
 cd m32-ai-assistant
+```
+
+## 2. Setup Backend
+
+```bash
+cd backend
+npm install
+# Create .env file and add:
+# MONGO_URI=your-mongo-uri
+# JWT_SECRET=your-secret
+# COHERE_API_KEY=your-cohere-api-key
+npm run start
+```
+
+## 3. Setup Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+✨ Credits  
+Built with 💖 by Hemraj Bhatia
+
+AI generation powered by Cohere API.
 
