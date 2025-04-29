@@ -6,7 +6,7 @@ import jsPDF from 'jspdf';
 import { toast } from 'react-hot-toast';
 
 
-   
+
 // Set workerSrc to official PDF.js CDN version
 //pdfjsLib.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjsLib.version}/pdf.worker.min.js`;
 import * as pdfjsLib from "pdfjs-dist";
@@ -77,9 +77,9 @@ const Dashboard = () => {
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
-  
+
     const ext = file.name.split('.').pop()?.toLowerCase();
-  
+
     if (ext === 'txt') {
       const reader = new FileReader();
       reader.onload = (event) => {
@@ -92,7 +92,7 @@ const Dashboard = () => {
       reader.onload = async function () {
         const typedarray = new Uint8Array(this.result as ArrayBuffer);
         const pdf = await pdfjsLib.getDocument({ data: typedarray }).promise;
-  
+
         let fullText = '';
         for (let i = 1; i <= pdf.numPages; i++) {
           const page = await pdf.getPage(i);
@@ -100,18 +100,18 @@ const Dashboard = () => {
           const pageText = textContent.items.map((item: any) => item.str).join(' ');
           fullText += pageText + '\n';
         }
-  
+
         // 🔥 ADD THIS CHECK BEFORE setting prompt:
         if (!fullText.trim()) {
           toast.error('❌ No text found in PDF. Please upload a text-based PDF.');
           return;
         }
-  
+
         setPrompt(fullText.trim());
       };
       reader.readAsArrayBuffer(file);
     }
-  };  
+  };
 
 
   return (
@@ -161,8 +161,15 @@ const Dashboard = () => {
             placeholder={`Enter ${type} topic or upload file...`}
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault(); // prevent form submit / reload
+                handleGenerate();
+              }
+            }}
             className="w-full py-3 pl-10 pr-28 text-sm border-2 border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
           />
+
 
           {/* Generate Button (Right) */}
           <button
@@ -174,6 +181,12 @@ const Dashboard = () => {
           </button>
         </div>
         {error && <p className="text-red-500">{error}</p>}
+        {loading && (
+          <div className="flex justify-center mt-6">
+            <div className="animate-spin rounded-full h-10 w-10 border-t-4 border-purple-500 border-solid"></div>
+          </div>
+        )}
+
 
         {response && (
           <div className="bg-gray-700 p-4 rounded mt-4 whitespace-pre-line border border-gray-600">
